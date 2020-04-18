@@ -1,3 +1,5 @@
+Text messenger project which allows user to user messaging via tcp connection. 
+
 Instructions for use:
 
 - Execute the server.
