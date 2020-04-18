@@ -1,2 +1,5 @@
+Instructions for use:
 
-Currently, ip is set to point to 10.0.0.16. Change ip to where the server is located.
+- Execute the server.
+
+- In the TextMessenger project, in the TextMessenger class, change the ip to where to the server is located.
