@@ -9,6 +9,7 @@ import java.io.*;
 
 public class TextWindow extends Thread{
     
+    private String ip;
     JFrame textUI = new JFrame("Text Window");
     private static JEditorPane textBox = new JEditorPane();
     JEditorPane inputBox = new JEditorPane();
@@ -20,7 +21,10 @@ public class TextWindow extends Thread{
     
     // When the class is initiated, it creates the GUI for the
     // text messenger
-    public TextWindow() {
+    public TextWindow(String ip) {
+        // ip
+        this.ip = ip;
+        
         // window size
         textUI.setLayout(null);  
         textUI.setSize(700,500);
@@ -89,7 +93,7 @@ public class TextWindow extends Thread{
         if (!inputBox.getText().equals("")) {
             try {
                 //InetAddress address = InetAddress.getByName(host);
-                socket = new Socket("10.0.0.16", 5555);
+                socket = new Socket(ip, 5555);
 
                 //Send the message to the server
                 OutputStream outStream = socket.getOutputStream();

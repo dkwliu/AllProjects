@@ -11,11 +11,16 @@ public class TextListener extends Thread{
     private int newCode = 1;
     private int msgCode = -1;
     private int recCode;
+    private String ip;
+    
+    public TextListener(String ip) {
+        this.ip = ip;
+    }
     
     public void run() {
 
         try {
-            socket = new Socket("10.0.0.16", 5555);
+            socket = new Socket(ip, 5555);
 
             // send message to server
             OutputStream os = socket.getOutputStream();
@@ -41,7 +46,7 @@ public class TextListener extends Thread{
         while (true) {
             try {
 
-                socket = new Socket("10.0.0.16", 5555);
+                socket = new Socket(ip, 5555);
 
                 // send message to server
                 OutputStream os = socket.getOutputStream();
@@ -64,7 +69,7 @@ public class TextListener extends Thread{
                     msgCode = recCode;
 
                     // send message to server
-                    socket = new Socket("10.0.0.16", 5555);
+                    socket = new Socket(ip, 5555);
                     os = socket.getOutputStream();
                     osw = new OutputStreamWriter(os);
                     bw = new BufferedWriter(osw);
