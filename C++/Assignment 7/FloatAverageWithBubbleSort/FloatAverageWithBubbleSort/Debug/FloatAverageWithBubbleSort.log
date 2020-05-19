@@ -1,0 +1,3 @@
+﻿  FloatAverageWithBubbleSort.cpp
+c:\users\dkwliu\desktop\dstuf\cis 27\spring 2018\assignment 7\floataveragewithbubblesort\floataveragewithbubblesort\floataveragewithbubblesort.cpp(34): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  FloatAverageWithBubbleSort.vcxproj -> C:\Users\dkwliu\Desktop\DStuf\CIS 27\Spring 2018\Assignment 7\FloatAverageWithBubbleSort\Debug\FloatAverageWithBubbleSort.exe
