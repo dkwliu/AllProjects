@@ -1,0 +1,7 @@
+DepartmentID,DepartmentName
+1,Executive Office
+2,Accounting
+3,Sales
+4,Manufacturing
+5,Distribution
+6,Product Development
