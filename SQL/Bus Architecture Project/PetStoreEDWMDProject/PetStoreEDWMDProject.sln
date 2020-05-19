@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1062
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D2ABAB84-BF74-430A-B69E-9DC6D40DDA17}") = "PetStoreEDWMDProject", "PetStoreEDWMDProject\PetStoreEDWMDProject.dwproj", "{84A8D762-1D99-440C-B4C3-CCB549CE174A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84A8D762-1D99-440C-B4C3-CCB549CE174A}.Development|Default.ActiveCfg = Development
+		{84A8D762-1D99-440C-B4C3-CCB549CE174A}.Development|Default.Build.0 = Development
+		{84A8D762-1D99-440C-B4C3-CCB549CE174A}.Development|Default.Deploy.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE3EC77E-E1FE-4C22-A13A-87B3AF261201}
+	EndGlobalSection
+EndGlobal
