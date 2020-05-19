@@ -1,3 +1,2 @@
 # AllProjects
-Contains all projects ... Java, C#, Python...
-
+This repository contains all of my projects and some of my courseworks.
