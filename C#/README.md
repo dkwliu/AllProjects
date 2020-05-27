@@ -1,1 +1,1 @@
-Contains my C# Projects and Assignments
+Contains my C# projects and assignments
