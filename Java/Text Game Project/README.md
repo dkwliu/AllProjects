@@ -1,0 +1,1 @@
+This is a simple text-based adventure game written in Java. It is complete as is.
