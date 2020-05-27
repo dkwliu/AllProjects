@@ -1,0 +1,795 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+install.packages("e1071")
+library(FNN)
+library(caret)
+library(rpart) 
+library(randomForest)
+library(rpart.plot) 
+```
+**Q.1 (3 pts)** The online education company Statistics.com segments its customers and prospects into three main categories: IT professionals (IT), statisticians (Stat), and other(Other). It also tracks, for each customer, the number of years since first contact (years). Consider the following customers; information about whether they have taken a course or not (the outcome to be predicted) is included:
+
+Customer 1: Stat, 1 year, did not take course
+
+Customer 2: Other, 1.1 year, took course.
+
+Consider now the following new prospect: Prospect 1: IT, 1 year. Using the above information on the two customers and one prospect, create one  dataset for all three with the categorical predictor variable transformed into 2 binaries,and a similar dataset with the categorical predictor variable transformed into 3 binaries.
+
+Q1-A: Using the Euclidean distance (and without normalizing the data), who the prospect is the closest to among two other customers?
+
+(0.5pt) Part I: 3-dummy case:
+
+A.Customer 1
+
+B. Customer 2
+
+C. Equidistant
+
+```{r}
+m3b.df <- data.frame(it=c(0,0), stat=c(1,0), other=c(0,1), years = c(1,1.1), course=c("no","yes"))
+pros.df <- data.frame(it=c(1), stat=c(0), other=c(0), years=c(1))
+nn <- knn(train=m3b.df[,1:4], test=pros.df, cl=m3b.df[,5], k=1)
+m3b.df
+pros.df
+
+rownames(m3b.df)[attr(nn,"nn.index")]
+nn
+```
+Q1-A1  ANSWER: A. CUSTOMER 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(0.5 pt) Part II: 2-dummy case
+
+
+
+A. Customer 1  
+
+B. Customer 2  
+
+C. Equidistant  
+```{r}
+m2b.df <- data.frame(it=c(0,0), stat=c(1,0), years = c(1,1.1), course=c("no","yes"))
+pros.df <- data.frame(it=c(1), stat=c(0), years=c(1))
+m2b.df
+pros.df
+nn <- knn(train=m2b.df[,1:3], test=pros.df, cl=m2b.df[,4], k=1)
+
+rownames(m2b.df)[attr(nn,"nn.index")]
+nn
+```
+Q1-A2  ANSWER: B. CUSTOMER 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q1-B: Using k-NN with k = 1, classify the prospect as taking or not taking a course using each of the two derived datasets. Does it make a difference whether you use 2 or 3 dummies?
+
+Answer the following 3 questions:
+
+(0.5 pt) Q1-BI: When 2 dummy variables are used, the prospect takes the course. True or False?
+
+(0.5 pt) Q1-BII: When 3 dummy variables are used, the prospect takes the course. True or False?
+
+(0.5 pt) Q1-BIII: It makes no difference whether you use 2 or 3 dummies. True or False?
+
+(0.5 pt) Q1-BIV: Unlike in linear regression, all three dummy variables should be used in the k-NN analysis. True or False?
+
+
+
+
+
+Q1-BI  ANSWER: TRUE
+Q1-BII  ANSWER: FALSE
+Q1-BIII  ANSWER: FALSE
+Q1-BIV  ANSWER: TRUE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.2 (5 pts)**
+
+Universal Bank is a relatively young bank growing rapidly in terms of overall customer acquisition. The majority of these customers are liability customers (depositors) with varying sizes of relationship with the bank. The customer base of asset customers (borrowers) is quite small, and the bank is interested in expanding this base rapidly to bring in more loan business. In particular, it wants to explore ways of converting its liability customers to personal loan customers (while retaining them as depositors). A campaign that the bank ran last year for liability customers showed a healthy conversion rate of over 9% success. This has encouraged the retail marketing department to devise smarter campaigns with better target marketing. The goal is to use k-NN to predict whether a new customer will accept a loan offer. This will serve as the basis for the design of a new campaign.The file UniversalBank.csv contains data on 5000 customers. The data include customer demographic information (age, income, etc.), the customer’s relationship with the bank (mortgage, securities account, etc.), and the customer response to the last personal loan campaign (Personal Loan). Among these 5000 customers, only 480(= 9.6%) accepted the personal loan that was offered to them in the earlier campaign.Partition the data into training (60%) and validation (40%) sets.Remember to transform categorical predictors with more than two categories into dummy variables first. Specify the success class as 1 (loan acceptance), and use the default cutoff value of0.5.
+
+```{r}
+ub <- read.csv("/Users/dkwliu/Desktop/BAN_620/Homework/Homework3/UniversalBank.csv")
+
+Education_1 <- as.data.frame(ifelse(ub$Education == 1, 1, 0))
+Education_2 <- as.data.frame(ifelse(ub$Education == 2, 1, 0))
+Education_3 <- as.data.frame(ifelse(ub$Education == 3, 1, 0))
+
+ub.df.og <- cbind(ub[,-8], Education_1, Education_2, Education_3)
+colnames(ub.df.og)[14:16] <- c("Education_1","Education_2","Education_3")
+
+ub.df <- ub.df.og[,-1]
+ub.df <- ub.df[,-4]
+ub.df <- cbind(ub.df, ub.df[,7])
+ub.df <- ub.df[,-7]
+colnames(ub.df)[14] <- "Personal.Loan"
+View(ub)
+View(ub.df)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q1-A: a. Consider the following customer:Age = 40, Experience = 10, Income = 84, Family = 2, CCAvg = 2, Education_1= 0, Education_2 = 1, Education_3 = 0, Mortgage = 0, Securities Account = 0,CD Account = 0, Online = 1, and Credit Card = 1. Perform a k-NN classification with all predictors except ID and ZIP code using k = 1.   
+
+**Q2-A (1 pt)**
+
+The customer will accept the loan offer. True or False
+
+```{r}
+#set.seed(1)
+#new prospect
+new.df <- data.frame(Age=40, Experience=10, Income=84, Family=2, CCAvg=2, Mortgage=0, Securities.Account=0, CD.Account=0, Online=1, CreditCard=1, Education_1=0, Education_2=1, Education_3=0)
+
+#training data
+t <- sample(row.names(ub.df), 0.6 * dim(ub.df)[1])
+train.df <- ub.df[t,]
+
+#validation data
+v <- setdiff(row.names(ub.df), t)
+valid.df <- ub.df[v,]
+
+train.norm.df <- train.df
+valid.norm.df <- valid.df
+ub.norm.df <- ub.df
+
+norm.value <- preProcess(train.df[,1:13], method=c("center","scale"))
+train.norm.df[,1:13] <- predict(norm.value, train.df[,1:13])
+valid.norm.df[,1:13] <- predict(norm.value, valid.df[,1:13])
+ub.norm.df[,1:13] <- predict(norm.value, ub.df[,1:13]) 
+new.norm.df <- predict(norm.value, new.df)
+
+
+# check closest neighbor
+nn <- knn(train = train.norm.df[,1:13], test = new.norm.df, cl = train.norm.df[,14], k = 1)
+#row.names(train.df)[attr(nn, "nn.index")]
+nn
+```
+ANSWER: FALSE. The customer will not accept the loan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q2-B (1 pt)**
+
+What is a choice of k that balances between overfitting and ignoring the predictor information? Choose the closest one.
+
+A. 1     
+
+B. 3        
+
+C. 7
+
+D. 10
+
+```{r}
+allk <- data.frame(k1=c(), k2=c(), k3=c(), k4=c(), k5=c(), k6=c(), k7=c(), k8=c(), k9=c(), k10=c(), k11=c(), k12=c(), k13=c(), k14=c())
+
+for (z in 1:100) {
+  #training data
+  t <- sample(row.names(ub.df), 0.6 * dim(ub.df)[1])
+  train.df <- ub.df[t,]
+  
+  #validation data
+  v <- setdiff(row.names(ub.df), t)
+  valid.df <- ub.df[v,]
+  
+  train.norm.df <- train.df
+  valid.norm.df <- valid.df
+  
+  norm.value <- preProcess(train.df[,1:13], method=c("center","scale"))
+  train.norm.df[,1:13] <- predict(norm.value, train.df[,1:13])
+  valid.norm.df[,1:13] <- predict(norm.value, valid.df[,1:13])
+  
+  # initialize a data frame with two columns: k, and accuracy.
+  accuracy.df <- data.frame(k = seq(1, 14, 1), accuracy = rep(0, 14), accround = rep(0, 14))
+  # compute knn for different k on validation.
+  for(i in 1:14) {
+    knn.pred <- knn(train = train.norm.df[,1:13], test = valid.norm.df[,1:13], cl = train.norm.df[,14], k = i)
+    #accuracy.df[i, 2] <- confusionMatrix(knn.pred, as.factor(valid.df[,14]))$overall[1]
+    #accuracy.df[i, 3] <- round(confusionMatrix(knn.pred, as.factor(valid.df[,14]))$overall[1], digits=2)
+    
+    allk[z, i] <- confusionMatrix(knn.pred, as.factor(valid.norm.df[,14]))$overall[1]
+  }
+}
+
+allkmean <- data.frame(k1=mean(allk[,1]), k2=mean(allk[,2]), k3=mean(allk[,3]), k4=mean(allk[,4]), k5=mean(allk[,5]), k6=mean(allk[,6]), k7=mean(allk[,7]), k8=mean(allk[,8]), k9=mean(allk[,9]), k10=mean(allk[,10]), k11=mean(allk[,11]), k12=mean(allk[,12]), k13=mean(allk[,13]), k14=mean(allk[,14]))
+
+allkmean
+```
+ANSWER: C. 7    ???
+
+3 also likely
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q2-C (1 pt)**
+
+Match the data in the confusion matrix (use the closest values to the ones that you've obtained) that resulted from using the best k with the respective elements, where 0's correspond to non-takers and 1's - to takers.
+
+Fraction of TP in the confusion matrix
+
+Fraction of TN in the confusion matrix
+
+Fraction of FP in the confusion matrix
+
+Fraction of FN in the confusion matrix 
+
+Data: 0.006; 0.891; 0.035; 0.0675
+```{r}
+#training data
+t <- sample(row.names(ub.df), 0.6 * dim(ub.df)[1])
+train.df <- ub.df[t,]
+
+#validation data
+v <- setdiff(row.names(ub.df), t)
+valid.df <- ub.df[v,]
+
+train.norm.df <- train.df
+valid.norm.df <- valid.df
+
+norm.value <- preProcess(train.df[,1:13], method=c("center","scale"))
+train.norm.df[,1:13] <- predict(norm.value, train.df[,1:13])
+valid.norm.df[,1:13] <- predict(norm.value, valid.df[,1:13])
+
+knn.pred <- knn(train = train.norm.df[,1:13], test = valid.norm.df[,1:13], cl = train.norm.df[,14], k = 1)
+confusionMatrix(knn.pred, as.factor(valid.norm.df[,14]))
+```
+ANSWERS:
+Fraction of TP in the confusion matrix:   0.0675          calculation gives 0.069
+
+Fraction of TN in the confusion matrix:   0.891           calculation gives 0.8945
+
+Fraction of FP in the confusion matrix:   0.006           calculation gives 0.0085
+
+Fraction of FN in the confusion matrix:   0.035           calculation gives 0.028
+
+Data: 0.006; 0.891; 0.035; 0.0675
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q2-D (1 tp)**: Consider the following customer: Age = 40, Experience = 10, Income = 200, Family = 10, CCAvg = 2, Education = 1, Mortgage = 1, Securities. Account = 1, CD.Account = 3, Online = 1, CreditCard = 1.
+*Question:*
+
+The customer is a non-taker. True or False?
+```{r}
+new2.df <- data.frame(Age=40, Experience=10, Income=200, Family=10, CCAvg=2, Mortgage=1, Securities.Account=1, CD.Account=3, Online=1, CreditCard=1, Education_1=1, Education_2=0, Education_3=0)
+
+#training data
+t <- sample(row.names(ub.df), 0.6 * dim(ub.df)[1])
+train.df <- ub.df[t,]
+
+#validation data
+v <- setdiff(row.names(ub.df), t)
+valid.df <- ub.df[v,]
+
+train.norm.df <- train.df
+valid.norm.df <- valid.df
+ub.norm.df <- ub.df
+
+norm.value <- preProcess(train.df[,1:13], method=c("center","scale"))
+train.norm.df[,1:13] <- predict(norm.value, train.df[,1:13])
+valid.norm.df[,1:13] <- predict(norm.value, valid.df[,1:13])
+ub.norm.df[,1:13] <- predict(norm.value, ub.df[,1:13]) 
+new2.norm.df <- predict(norm.value, new2.df)
+
+
+# check closest neighbor
+nn2 <- knn(train = train.norm.df[,1:13], test = new2.norm.df, cl = train.norm.df[,14], k = 1)
+
+row.names(train.norm.df)[attr(nn2, "nn.index")]
+nn2
+```
+ANSWER: FALSE. The customer is a taker
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q2-E (1pt)**: Repartition the data, this time into training, validation, and test sets (50% : 30% :20%). Apply the k-NN method with the k chosen above. Compare the confusion matrix of the test set with that of the training and validation sets. Match the rates (the closest value) with the respective values:
+
+Train True Positive Rate, TPR (TP/P)            0.741         
+
+Validation TPR                                  0.676       
+
+Test TPR                                        0.643      
+
+Training True Negative Rate, TNR (TN/N)         0.996       
+
+Validation TNR                                  0.996       
+
+Test TNR                                        0.993       
+
+Data: 0.996, 0.741, 0.643,  0.996, 0.993, 0.676
+```{r}
+means <- data.frame(traintpr = c(), traintnr = c(), validtpr = c(), validtnr = c(), testtpr = c(), testtnr = c())
+
+
+for (i in 1:100) {
+  newt <- sample(row.names(ub.df), 0.5 * dim(ub.df)[1])
+  newtrain.df <- ub.df[newt,]
+  
+  #validati0n data
+  i <- setdiff(row.names(ub.df), newt)
+  newv <- sample(i, 0.6 * (5000/2))
+  newvalid.df <- ub.df[newv,]
+  
+  #test data
+  test <- setdiff(i, newv)
+  test.df <- ub.df[test,]
+  
+  
+  
+  
+  newtrain.norm.df <- newtrain.df
+  newvalid.norm.df <- newvalid.df
+  test.norm.df <- test.df
+  
+  norm.value <- preProcess(newtrain.df[,1:13], method=c("center","scale"))
+  newtrain.norm.df[,1:13] <- predict(norm.value, newtrain.df[,1:13])
+  newvalid.norm.df[,1:13] <- predict(norm.value, newvalid.df[,1:13])
+  test.norm.df[,1:13] <- predict(norm.value, test.df[,1:13]) 
+  
+  
+  # training data confusion matrix
+  newknn1.pred <- knn(train = newtrain.norm.df[,1:13], test = newtrain.norm.df[,1:13], cl = newtrain.norm.df[,14], k = 5)
+  means[i, 1] <- confusionMatrix(newknn1.pred, as.factor(newtrain.norm.df[,14]), positive = "1")$byClass[1]
+  means[i, 2] <- confusionMatrix(newknn1.pred, as.factor(newtrain.norm.df[,14]), positive = "1")$byClass[2]
+  
+  # validation data confusion matrix
+  newknn2.pred <- knn(train = newvalid.norm.df[,1:13], test = newvalid.norm.df[,1:13], cl = newvalid.norm.df[,14], k = 5)
+  means[i, 3] <-confusionMatrix(newknn2.pred, as.factor(newvalid.norm.df[,14]), positive = "1")$byClass[1]
+  means[i, 4] <- confusionMatrix(newknn2.pred, as.factor(newvalid.norm.df[,14]), positive = "1")$byClass[2]
+  
+  # test data confusion matrix
+  newknn3.pred <- knn(train = test.norm.df[,1:13], test = test.norm.df[,1:13], cl = test.norm.df[,14], k = 5)
+  means[i, 5] <- confusionMatrix(newknn3.pred, as.factor(test.norm.df[,14]), positive = "1")$byClass[1]
+  means[i, 6] <- confusionMatrix(newknn3.pred, as.factor(test.norm.df[,14]), positive = "1")$byClass[2]
+}
+
+meansall <- data.frame(traintpr = mean(means[,1]), traintnr = mean(means[,2]), validtpr = mean(means[,3]), validtnr = mean(means[,4]), testtpr = mean(means[,5]), testtnr = mean(means[,6]))
+
+meansall
+```
+ANSWERS:
+Train True Positive Rate, TPR (TP/P)            0.741         
+
+Validation TPR                                  0.676       
+
+Test TPR                                        0.643      
+
+Training True Negative Rate, TNR (TN/N)         0.996       
+
+Validation TNR                                  0.996       
+
+Test TNR                                        0.993       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.3 (0.5 pt)** KNN yields a uniform rule that can be applied to each new record to be predicted. True or False?
+
+ANSWER: TRUE
+
+
+
+
+**Q.4 (0.5 pt)** Which of the following is not a part of the KNN learning?
+
+A. Calculation of the distance from a new record to each of the training records
+
+B. Selection of the n-closest training records
+
+C. Determining the average target value for the n-closest training records
+
+D. Scoring the target value to the new record
+
+E. Fitting the distances to the training set
+
+
+ANSWER: E (probably E actually)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.5 (6 pts)**
+
+Data in the file eBayAuctions.csv can be used to build a model that will classify auctions as competitive or noncompetitive. A competitive auction is defined as an auction with at least two bids placed on the item auctioned. The data include variables that describe the item (auction category), the seller (his/her eBay rating), and the auction terms that the seller selected (auction duration, opening price, currency, day-of-week of auction close). In addition,we have the price at which the auction closed. The task is to predict whether or not the auction will be competitive.Data Preprocessing. Convert variable Duration into a categorical variable. Split the data into training (60%) and validation (40%) datasets.
+
+Fit a classification tree using all predictors, using the best-pruned tree. To avoid overfitting, set the minimum number of records in a terminal node to 50 (an argument in rpart function"minbucket = 50"). Also, set the maximum number of levels to be displayed at seven (in rpart: maxdepth = 7). Write down the results in terms of rules and answer the following questions. 
+
+
+**Q.5A (2 pts)** Which of the following does not follow from the classification tree?
+
+A.If (OpenPrice >= 3.7) and (ClosePrice < 20) then class = 0
+
+B.If (3.7 <= OpenPrice < 21) and (ClosePrice >= 20) then class = 1
+
+C.If (2.4 <= OpenPrice < 3.7) and (ClosePrice < 3.7) then class = 0
+
+D.If (OpenPrice < 3.7) and (ClosePrice >= 3.7) then class = 0
+
+```{r}
+#set.seed(3)
+ea <- read.csv("/Users/dkwliu/Desktop/BAN_620/Lecture_3/RMB/eBayAuctions.csv")
+ea[,4] <- as.factor(ea[,4])
+
+eat <- sample(row.names(ea), 0.6 * dim(ea)[1])
+ea.train.df <- ea[eat,]
+
+eav <- setdiff(row.names(ea), eat)
+ea.valid.df <- ea[eav,]
+
+tree <- rpart(Competitive. ~ ., data=ea.train.df, method = "class", control = rpart.control(minbucket = 50, maxdepth = 7), cp=0.00001)
+prp(tree, type = 1, extra = 1, under = TRUE, split.font = 1, varlen = -10)
+
+printcp(tree)
+```
+
+
+create best pruned tree
+```{r}
+ptree <- prune(tree, cp = 0.04)
+prp(ptree, type = 1, extra = 1, under = TRUE, split.font = 1, varlen = -10)
+```
+ANSWER:
+A    YES
+B    NOT REALLY?
+C    KINDA YES
+D    NO
+
+
+D.   No
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.5B (1 pt)** Which of the following variables makes the whole exercise circular, i.e., uses the predictor variable that is not known until it can be concluded whether the auction was competitive or not? 
+
+
+A. Seller Rating
+
+B. Category
+
+C. Currency
+
+D. Close Price
+
+E. Duration
+
+F. Open Price
+```{r}
+
+```
+ANSWER: most likely D.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.5C (1 pt)** Fit another classification tree (using the best-pruned tree, with a minimum number of records per terminal node = 50 and maximum allowed number of displayed levels= 7), this time only with predictors that can be used for predicting the outcome of a new auction. 
+
+**Question** How many rules in total would determine the outcome of an auction according to this classification tree?
+
+A.1
+
+B.2
+
+C.3
+
+D.4
+
+```{r}
+newtree <- rpart(Competitive. ~ Category + currency + Duration + endDay + OpenPrice, data=ea.train.df, method = "class", control = rpart.control(minbucket = 50, maxdepth = 7), cp=0.00001)
+prp(newtree, type = 1, extra = 1, under = TRUE, split.font = 1, varlen = -10)
+printcp(newtree)
+```
+```{r}
+newptree <- prune(newtree, cp = 0.0249)
+newtree$cptable[which.min(newtree$cptable[,"xerror"]),"CP"]
+newtree$cptable[which.min(newtree$cptable[,"xerror"]),"xstd"] + newtree$cptable[which.min(newtree$cptable[,"xerror"]),"xerror"] 
+newtree$cptable[,"CP"]
+newtree$cptable[,"xerror"]
+newtree$cptable[,"xstd"]
+prp(newptree, type = 1, extra = 1, under = TRUE, split.font = 1, varlen = -10)
+```
+ANSWER: B.2  (Probably)
+
+
+
+
+2 2 4 3 2 3 4 2 2 2 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.5D (1 pt)** Examine the confusion matrix for the tree. How accurate is the predictive performance of the model?
+A. About 90%
+
+B. About 80%
+
+C. About 70%
+
+D. About 60%
+```{r}
+
+newptree.pred <- predict(newptree, ea.valid.df, type = "class")
+confusionMatrix(newptree.pred, as.factor(ea.valid.df$Competitive.))
+
+```
+
+0.674    0.669    0.697     0.682   0.698   0.714   0.67   0.702    0.697  0.684   0.678  0.717
+
+ANSWER:
+C. about 70%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*Q.5E (1 pt)** Based on the last decision-tree analysis, which would be your recommendation to the seller on how to achieve competitive bidding?
+
+A. Develop high rating
+
+B. Start the auction early
+
+C. Control the closing price
+
+D. Use the lowest opening price possible
+
+```{r}
+```
+
+ANSWER: D. Use the lowest opening price possible (most likely)

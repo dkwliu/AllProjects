@@ -1,4 +1,0 @@
-﻿  stdafx.cpp
-  LinkedListQueue.cpp
-c:\users\dkwliu\desktop\dstuf\cis 27\spring 2018\assignment 13\linkedlistqueue\linkedlistqueue\linkedlistqueue.cpp(90): warning C4715: 'DoublyLinkedListQueue::front': not all control paths return a value
-  LinkedListQueue.vcxproj -> C:\Users\dkwliu\Desktop\DStuf\CIS 27\Spring 2018\Assignment 13\LinkedListQueue\Debug\LinkedListQueue.exe

@@ -1,3 +1,0 @@
-﻿  LinkedListStack.cpp
-c:\users\dkwliu\desktop\dstuf\cis 27\spring 2018\assignment 13\linkedliststack\linkedliststack\linkedliststack.cpp(90): warning C4715: 'DoublyLinkedListStack::top': not all control paths return a value
-  LinkedListStack.vcxproj -> C:\Users\dkwliu\Desktop\DStuf\CIS 27\Spring 2018\Assignment 13\LinkedListStack\Debug\LinkedListStack.exe

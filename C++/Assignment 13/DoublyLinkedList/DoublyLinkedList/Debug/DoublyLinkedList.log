@@ -1,5 +1,0 @@
-﻿  stdafx.cpp
-  DoublyLinkedList.cpp
-c:\users\dkwliu\desktop\dstuf\cis 27\spring 2018\assignment 13\doublylinkedlist\doublylinkedlist\doublylinkedlist.cpp(95): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\dkwliu\desktop\dstuf\cis 27\spring 2018\assignment 13\doublylinkedlist\doublylinkedlist\doublylinkedlist.cpp(101): warning C4715: 'DoublyLinkedListStack::top': not all control paths return a value
-  DoublyLinkedList.vcxproj -> C:\Users\dkwliu\Desktop\DStuf\CIS 27\Spring 2018\Assignment 13\DoublyLinkedList\Debug\DoublyLinkedList.exe

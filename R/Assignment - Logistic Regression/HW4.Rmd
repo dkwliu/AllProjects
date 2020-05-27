@@ -1,0 +1,605 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+
+
+
+
+
+Q1
+Last year a dataset with three variables was collected from the BAN620 course. The three variables were X – the number of hours studied by a student, Y – GPA of students prior to enrollment into BAN620, and Z – whether a student receives an “A” in BAN620. After fitting a logistic regression, we found three coefficients: beta0 = -6; beta1 = 0.05,  beta2 = 1. Answer the following questions.
+
+
+
+*A (1 pt). What is the probability that a student who studied for 40 h and has an incoming GPA of 3.5 gets an “A” in BAN620?*
+
+A. 37.75%
+
+B. 99.99%
+
+C. 62.25%
+
+D. 7.59%
+
+E. 92.4%
+```{r}
+1/(1+exp(6-0.05*40-1*3.5))
+
+exp(-6 + (0.05 * 40) + (1 * 3.5))/(1 + exp(-6 + (0.05 * 40) + (1 * 3.5)))
+
+```
+ANSWER
+A. 37.75
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q1B
+How many hours a BAN620 student with a GPA of 3.5 would have to study in order to guarantee 50% chance of getting an “A”?* 
+
+
+A. 40 hours
+
+B. 45 hours
+
+C. 50 hours
+
+D. 55 hours
+```{r}
+#exp(-6 + (0.05 * 40) + (1 * 3.5))/(1 + exp(-6 + (0.05 * 40) + (1 * 3.5)))
+#exp(-6 + (0.05 * 45) + (1 * 3.5))/(1 + exp(-6 + (0.05 * 45) + (1 * 3.5)))
+exp(-6 + (0.05 * 50) + (1 * 3.5))/(1 + exp(-6 + (0.05 * 50) + (1 * 3.5)))
+#exp(-6 + (0.05 * 55) + (1 * 3.5))/(1 + exp(-6 + (0.05 * 55) + (1 * 3.5)))
+
+#1/(1+exp(6-0.05*40-1*3.5))
+#1/(1+exp(6-0.05*45-1*3.5))
+1/(1+exp(6-0.05*50-1*3.5))
+#Bi1/(1+exp(6-0.05*55-1*3.5))
+```
+ANSWER
+C. 50 hours
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q2
+Say there is a group of credit card holders that have an odds of 0.37 of defaulting on their payments. What is the fraction of people in the group that will actually default?
+
+A. 37%
+
+B. 63%
+
+C. 27%
+
+D. 54%
+```{r}
+0.37/(1+0.37)  # 0.37 is the odds, so 0.27 is the prob
+              # odds/1+odds   is the probability
+0.37/1.37
+```
+ANSWER
+C. 27%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q3
+
+A student has 26% chance of defaulting in his payments. What are the odds the he will actually default?
+
+
+A. 26%
+
+B. 74%
+
+C. 35%
+
+D. 13%
+```{r}
+#0.26/(1+0.26)
+#0.74/(1+0.74)
+0.35/(1+0.35)    #0.26 is thge prob, so 0.35 is the odds
+#0.13/(1+0.13)
+0.26/(1-0.26)    # p/1-p   is the odds
+```
+ANSWER
+C. 35%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q4
+The file Banks.csv includes data on a sample of 20 banks. The “Financial Condition” column records the judgment of an expert on the financial condition of each bank. This outcome variable takes one of two possible values — weak or strong — aaccording to the financial condition of the bank. The predictors are two ratios used in the financial analysis of banks: TotLns&Lses/Assets is the ratio of total loans and leases to total assets and TotExp/Assets is the ratio of total expenses to total assets. The target is to use the two ratios for classifying the financial condition of a new bank.Run a logistic regression model (on the entire dataset) that models the status of a bank as a function of the two financial measures provided. Specify the success class as weak (this is similar to creating a dummy that is 1 for financially weak banks and 0otherwise), and use the default cutoff value of 0.5.
+
+**Q4.1 (1pt)**Match the following:
+
+
+Match the following:
+
+A. The coefficient for the ratio of total loans and leases to total assets
+
+B. The coefficient for the ratio of total expenses to total assets
+
+C. The coefficient for the intercept
+
+D. Probability of being classified as financially weak when the two predictor variables as equal to 1.
+
+
+1. 1
+
+2. 89.324
+
+3. -14.721
+
+4.  8.371
+
+```{r}
+banks <- read.csv("/Users/dkwliu/Desktop/BAN_620/Homework/Homework4/banks.csv")
+banks.og.df <- banks[,c(-1,-3)]
+banks.df <- banks[,c(-1,-3)]
+
+names(banks.df) <- c("FC","TEA","TLLA")
+```
+
+```{r}
+banks.log.reg <- glm(FC ~ ., data = banks.df, family = "binomial") 
+options(scipen=999)
+summary(banks.log.reg)
+#banks.log.reg
+
+
+exp(-14.721 + (89.834 * 1) + (8.371 * 1))/(1 + exp(-14.721 + (89.834 * 1) + (8.371 * 1)))
+```
+ANSWERS:
+A. The coefficient for the ratio of total loans and leases to total assets                                    4. 8.371
+
+B. The coefficient for the ratio of total expenses to total assets                                            2. 89.324
+
+C. The coefficient for the intercept                                                                          3. -14.721
+
+D. Probability of being classified as financially weak when the two predictor variables as equal to 1.        1. 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q4.2
+
+Consider a new bank whose total loans and leases/assets ratio = 0.6 and total expenses/assets ratio = 0.11. From your logistic regression model, estimate the following four quantities for this bank and match with the correct value: the logit, the odds, the probability of being financially weak, and the classification of the bank (use cutoff= 0.5).
+
+
+A. the logit
+
+B. the odds
+
+C. the prob
+
+D. the class
+
+
+1.2014; 0.1835; 1;  0.5458  
+```{r}
+new.df <- data.frame(TEA = c(0.11), TLLA = c(0.6))
+banks.log.reg.pred <- predict(banks.log.reg, new.df, type = "response")
+
+# below calculates the probability
+banks.log.reg.pred
+exp(-14.721 + (89.834 * 0.11) + (8.371 * 0.6))/(1 + exp(-14.721 + (89.834 * 0.11) + (8.371 * 0.6)))
+
+# which class is it
+ifelse(banks.log.reg.pred > 0.5,1,0)
+ifelse(exp(-14.721 + (89.834 * 0.11) + (8.371 * 0.6))/(1 + exp(-14.721 + (89.834 * 0.11) + (8.371 * 0.6))) > 0.5, 1,0)
+
+# odds
+exp(-14.721 + (89.834 * 0.11) + (8.371 * 0.6))
+0.5458/(1-0.5458)
+
+#logit
+-14.721 + (89.834 * 0.11) + (8.371 * 0.6)
+```
+ANSWERS:
+A. the logit    0.1835
+
+B. the odds     1.2014
+
+C. the prob     0.5458
+
+D. the class    1
+
+
+
+
+
+
+```{r}
+banks.log.reg.pred <- predict(banks.log.reg, banks.df, type = "response")
+banks.log.reg.pred
+
+
+#sysadm.df.log.reg.pred
+pred <- data.frame(FC = ifelse(banks.log.reg.pred > 0.2, 1,0))
+banks.log.reg.pred <- cbind(banks.log.reg.pred,pred)
+
+# combined the actual Yes/No results with the predicted Yes/No results
+compare <- data.frame(Actual = banks.df[,1],Predicted = pred)
+names(compare) <- c("Actual","Predicted")
+
+allYes <- subset(compare, Actual == 1)
+allNo <- subset(compare, Actual == 0)
+
+compare
+allYes
+allNo
+
+#true positive
+some <- ifelse(compare[,2] == 1 & compare[,1] == 1, "True Positive", "False Positive") 
+
+# misclassified employees who did not complete
+#sum(allNo[,2])/NROW(allNo)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+Q4.4
+Given the classification cutoff in Q4.2, a bank will be classified as financially strong if the odds are less than 1.True or False?
+
+ANSWER:
+TRUE  (assuming ratio is weak:strong and not strong:weak)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q4.5
+
+Interpret the estimated coefficient for the total loans & leases to total assets ratio(TotLns&Lses/Assets). The coefficient implies one of the following:
+
+
+A. An increase of one unit in total loans and leases-to-assets is associated with an increase in the odds of being financially weak by a factor of 4321.
+
+B. An increase of one unit in total loans and leases-to-assets is associated with an increase in the odds of being financially weak by a factor of 8.37.
+
+C. An increase of one unit in total loans and leases-to-assets is associated with a decrease in the odds of being financially weak by a factor of 4321.
+
+D. An increase of one unit in total loans and leases-to-assets is associated with a decrease in the odds of being financially weak by a factor of 8.37.
+```{r}
+new.df <- data.frame(TEA = c(0.11), TLLA = c(1))
+banks.log.reg.pred <- predict(banks.log.reg, new.df, type = "response")
+
+new.df2 <- data.frame(TEA = c(0.11), TLLA = c(2))
+banks.log.reg.pred2 <- predict(banks.log.reg, new.df2, type = "response")
+
+(banks.log.reg.pred/(1-banks.log.reg.pred))
+(banks.log.reg.pred2/(1-banks.log.reg.pred2))
+
+(banks.log.reg.pred2/(1-banks.log.reg.pred2))/(banks.log.reg.pred/(1-banks.log.reg.pred))
+
+(exp(-14.721 + (89.834 * 0.11) + (8.371 * 2))) / (exp(-14.721 + (89.834 * 0.11) + (8.371 * 1)))
+```
+(ANSWER)
+A. An increase of one unit in total loans and leases-to-assets is associated with an increase in the odds of being financially weak by a factor of 4321.   (assuming that it is weak/strong)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q4.6
+When a bank that is in poor financial condition is misclassified as financially strong, the misclassification cost is much higher than when a financially strong bank is misclassified as weak. To minimize the expected cost of misclassification,  the cutoff value for classification should be increased above 50%. True or False?
+
+FALSE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q5
+
+A management consultant is studying the roles played by experience and training in a system administrator’s ability to complete a set of tasks in a specified amount of time. In particular, she is interested in discriminating between administrators who are able to complete given tasks within a specified time and those who are not. Data are collected on the performance of 75randomly selected administrators. They are stored in the file SystemAdministrators.csv in .The variable Experience measures months of full-time system administrator experience,while Training measures the number of relevant training credits. The outcome variable Completed is either Yes or No, according to whether or not the administrator completed the tasks. 
+
+**Q5.1 (1 pt)**Create a scatter plot of Experience vs. Training using color or symbol to distinguish programmers who completed the task from those who did not complete it. Based on the graph, what is a better predictor of the quality of an administrator?
+
+A. Experience
+
+B. Training
+
+C. Neither is a good predictor
+
+D. Both are equally good
+```{r}
+sysadm <- read.csv("/Users/dkwliu/Desktop/BAN_620/Homework/Homework4/SystemAdministrators.csv")
+sysadm.df <- sysadm
+names(sysadm.df) <- c("Experience","Training","Completed")
+sysadm.df[,3] <- ifelse(sysadm.df[,3] == "Yes", 1, 0) 
+sysadm.df <- as.data.frame(sysadm.df)
+```
+```{r}
+plot(Completed ~ Experience, data=sysadm.df, pch=ifelse(sysadm.df$Completed==1, 1, 3))
+plot(Completed ~ Training, data=sysadm.df, pch=ifelse(sysadm.df$Completed==1, 1, 3))
+```
+ANSWER:
+A. Experience
+
+(Training does not have many points)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q5.2
+Run a logistic regression model with both predictors using the entire dataset as training data. Among those who completed the task, what is the percentage of programmers incorrectly classified as failing to complete the task at the cutoff of 0.5? Choose the closest.
+
+
+A.33%
+
+B.3%
+
+C.13%
+
+D.8%
+
+```{r}
+library(caret)
+
+sysadm.df.log.reg <- glm(Completed ~ ., data = sysadm.df, family = "binomial")
+
+#ummary(sysadm.df.log.reg)
+sysadm.df.log.reg.pred <- predict(sysadm.df.log.reg, sysadm.df, type = "response")
+
+#sysadm.df.log.reg.pred
+pred <- data.frame(Completed = ifelse(sysadm.df.log.reg.pred > 0.1, 1,0))
+sysadm.df.log.reg.pred <- cbind(sysadm.df.log.reg.pred,pred)
+
+# combined the actual Yes/No results with the predicted Yes/No results
+compare <- data.frame(Actual = sysadm.df[,3],Predicted = pred)
+names(compare) <- c("Actual","Predicted")
+
+allYes <- subset(compare, Actual == 1)
+allNo <- subset(compare, Actual == 0)
+
+# misclassified employees who completed
+1-sum(allYes[,2])/NROW(allYes)
+
+# misclassified employees who did not complete
+sum(allNo[,2])/NROW(allNo)
+
+# all error
+(1-sum(allYes[,2])/NROW(allYes)) + sum(allNo[,2])/NROW(allNo)
+((NROW(allYes) - sum(allYes[,2])) + sum(allNo[,2]))/75
+(NROW(allYes) - sum(allYes[,2])) + sum(allNo[,2])
+```
+ANSWER:
+A. 33%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q5.3
+
+Lowering the threshold below 0.5 may not result in a decrease in the rate of misclassification. True or False?
+
+ANSWER: TRUE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q5.4
+How much experience must be accumulated by a programmer with 4 years of training before his or her estimated probability of completing the task becomes 0.6? 
+
+A. about 9.4 months
+
+B. less than 9.4 months
+
+C. more than 9.4 months
+
+D. about 10 months
+```{r}
+summary(sysadm.df.log.reg)
+experience <- 9.47
+
+newadmin <- data.frame(Experience=experience, Training=4)
+
+exp(-10.9813 + (1.1269 * experience) + (0.1805 * 4))/(1+exp(-10.9813 + (1.1269 * experience) + (0.1805 * 4)))
+
+newad.pred <- predict(sysadm.df.log.reg, newadmin, type="response")
+newad.pred
+```
+A. about 9.4 months

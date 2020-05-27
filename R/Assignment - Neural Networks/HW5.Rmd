@@ -1,0 +1,759 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r setup}
+install.packages("neuralnet")
+install.packages("nnet")
+library(caret)
+library(neuralnet)
+library(nnet)
+```
+
+
+
+**Q.1 (1 pt)**
+
+A neural net typically starts out with random coefficients;
+
+hence, it produces essentially random predictions when presented with its first case.
+
+What is the key ingredient by which the net evolves to produce a more accurate
+
+prediction?
+
+
+A. Updating of the weights
+
+B. Limited number of epochs
+
+C. Logistic activation function
+
+D. Existence of the exact solution
+
+E. Non-linearity of the decision boundary
+
+
+
+
+ANSWER: A. Updating of the weights
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.2 (1 pt)**
+
+Which of the following are a neural network’s hyperparameters?
+
+ 
+
+A. The number of hidden layers
+
+B. The number of unit/nodes/neurons
+
+C. The number of observations included in the training set
+
+D. The activation function
+
+E. The learning rate
+
+
+ANSWER:
+A. The number of hidden layers
+B. The number of unit/nodes/neurons
+D. The activation function
+E. The learning rate
+
+(see https://towardsdatascience.com/neural-networks-parameters-hyperparameters-and-optimization-strategies-3f0842fac0a5)
+(probably not C because batch size does not necessarily relate to the size of a training set)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.3**
+
+Consider the data on used cars (ToyotaCorolla.csv) with 1436 records and
+
+details on 38 attributes, including Price, Age, KM, HP, and other specifications. The
+
+goal is to predict the price of a used Toyota Corolla based on its specifications.
+
+Fit a neural network model to the data. Use a single hidden layer with 2 nodes.
+
+• Use predictors Age_08_04, KM, Fuel_Type, HP, Automatic, Doors, Quarterly_Tax,
+
+Mfr_Guarantee, Guarantee_Period, Airco, Automatic_airco, CD_Player,
+
+Powered_Windows, Sport_Model, and Tow_Bar.
+
+• Remember to first scale the numerical predictor and outcome variables to a 0–1
+
+scale (use function preprocess() with method = “range” from the caret package) and convert
+
+categorical predictors to dummies.
+
+Parition the data 80:20, and calculate RMSE for predictions on training and validation data sets 3 times (do not set seed for a random number generator). Record individual RMSE and obtain average RMSE for training and validation sets.
+
+**Question (1 pt)**
+
+The mean square error is smaller for validation set than for training. True or False?
+
+```{r}
+tc <- read.csv("/Users/dkwliu/Desktop/BAN_620/Homework/Homework5/ToyotaCorolla.csv")
+tc.df <- tc[,c(3,4,7,8,9,12,14,17,19,21,25,26,28,30,34,39)]
+tc.df <- cbind(tc.df[,-4], class.ind(as.factor(tc.df$Fuel_Type)))
+```
+
+
+## If original data normalized is used
+```{r}
+#preprocess method
+norm.values <- preProcess(tc.df, method="range")
+tc.df.norm <- predict(norm.values, tc.df)
+#View(tc.df.norm)
+tc.df.nn <- neuralnet(Price ~ Age_08_04 + KM + HP + Automatic + Doors + Quarterly_Tax + Mfr_Guarantee + 
+                        Guarantee_Period + Airco + Automatic_airco + CD_Player + Powered_Windows +
+                        Sport_Model + Tow_Bar + CNG + Diesel + Petrol, data=tc.df.norm, linear.output = F, hidden = 2)
+
+#tc.df.nn$weights
+#plot(tc.df.nn, rep = "best")
+#tc.df.nn$result.matrix
+
+#predicted <- neuralnet::compute(tc.df.nn, tc.df.norm)
+#predicted
+#testing <- data.frame(actual = tc.df.norm$Price, predicted = predicted$net.result)
+
+```
+
+
+
+## If training data normalized is used
+```{r}
+trainv <- c()
+validv <- c()
+
+for (i in 1:3) {
+  
+  t <- sample(rownames(tc.df.norm), dim(tc.df.norm)[1] * 0.8)
+  tc.train.norm <- tc.df.norm[t,]
+  
+  v <- setdiff(rownames(tc.df.norm), t)
+  tc.valid.norm <- tc.df.norm[v,]
+  
+  train.nn <- neuralnet(Price ~ Age_08_04 + KM + HP + Automatic + Doors + Quarterly_Tax + Mfr_Guarantee + 
+                          Guarantee_Period + Airco + Automatic_airco + CD_Player + Powered_Windows +
+                          Sport_Model + Tow_Bar + CNG + Diesel + Petrol, data=tc.train.norm, linear.output = F, hidden = 2)
+  
+  valid.nn <- neuralnet(Price ~ Age_08_04 + KM + HP + Automatic + Doors + Quarterly_Tax + Mfr_Guarantee + 
+                          Guarantee_Period + Airco + Automatic_airco + CD_Player + Powered_Windows +
+                          Sport_Model + Tow_Bar + CNG + Diesel + Petrol, data=tc.valid.norm, linear.output = F, hidden = 2)
+  
+  #View(tc.train.norm)
+  #View(tc.valid.norm)
+  
+  trainpred <- neuralnet::compute(train.nn, tc.train.norm)
+  trainpred
+  validpred <- neuralnet::compute(train.nn, tc.valid.norm)
+  validpred
+  
+  trainRMSE <- RMSE(tc.train.norm[,1], trainpred$net.result)
+  validRMSE <- RMSE(tc.valid.norm[,1], validpred$net.result)
+  
+  trainv[i] <- trainRMSE
+  validv[i] <- validRMSE
+}
+
+trainv
+validv
+
+mean(trainv)
+mean(validv)
+
+```
+ANSWER:
+FALSE. The validation data has a higher RMSE (assuming that we are building a model with just the training data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.4 (1 pt)**
+
+Which of the following activation functions can be used in the neuralnet package?
+
+ 
+
+A. logistic
+
+B. rectified linear unit
+
+C. hyperbolic tangent
+
+D. softmax
+
+
+ANSWER:  
+A. logistic
+C. hyperbolic tangent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.5 (1 pt) **
+
+You are attempting to classify wines into 5 categories using their chemical content as well as tasting and aromatic impressions. Overall there are 25 features that you can use. Considering that it may be advantageous to have in the last hidden layer as many nodes as there are output variables, which of the following architectures, where the order corresponds to the number of units in sequential layers, will be acceptable?
+
+A. 1,3,4,5,4,3,1
+
+B. 4,1
+
+C. 20,5
+
+D. 4,4,5,5,4
+
+ 
+
+ANSWER:   C. 20, 5   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.6 (1 pt)**
+
+ 
+
+Which of the following statement(s) correctly represents a real neuron?
+
+ 
+
+A. A neuron has a single input and a single output only
+
+B. A neuron has multiple inputs but a single output only
+
+C. A neuron has a single input but multiple outputs
+
+D. A neuron has multiple inputs and multiple outputs
+
+E. All of the above statements are valid
+
+
+
+ANSWER:
+E. All of the above statements are valid (according to the site linked below)
+
+
+https://www.analyticsvidhya.com/blog/2017/01/must-know-questions-deep-learning/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.7 (1 pt)**
+
+What is most important in learning a neural network?
+
+ 
+
+A. Determining each neuron's weight and bias
+
+B. Limiting the number of steps until convergence
+
+C. Controlling network's size
+
+D. Keeping constant learning rate
+
+E. None of the answers
+
+
+
+
+
+ANSWER:
+A. Determining each neuron's weight and bias
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.8 (1 pt)**
+
+What is the best way to solve for neurons' weights?
+
+ 
+
+A. Assign random values based on your understanding of the distributions of predictor variables
+
+B. Search every possible combination of weights and biases till you get the best value
+
+C. Iteratively check that after assigning a value how far you are from the best values, and slightly change the assigned values to make them better
+
+D. None of the answers
+
+
+
+ANSWER:
+C. Iteratively check that after assigning a value how far you are from the best values, and slightly change the assigned values to make them better
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.9 (1 pt)**
+
+Order the following according to the sequence of steps in a learning process by simple perceptron
+
+1.Initialize weights of perceptron randomly
+
+2.Go to the next batch of dataset
+
+3.If the prediction does not match the output, change the weights
+
+4.For a sample input, compute an output
+
+
+ANSWER:   1 , 4 , 3 , 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.10 (1 pt)**
+
+What would happen if instead of random weight initializations for a classification learning using a neural network,  all the weights were set to zero.
+
+ 
+
+A. There will not be any problem and the neural network will train properly
+
+B. The neural network will train but all the neurons will end up recognizing the same thing
+
+C. The neural network will not train as there is no net gradient change
+
+D. None of the answers
+
+
+ANSWER:   B. The neural network will train but all the neurons will end up recognizing the same thing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.11 (1 pt)**
+
+What will happen if we set the learning rate of the gradient descent too high?
+
+ 
+
+A. The minimum may be found sooner
+
+B. The minimum may not be found
+
+C. Only local minimum will be found
+
+D. It will accelerate the convergence
+
+ANSWER: B. The minimum may not be found
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.12 (1 pt)**
+
+According to our discussion during the lecture:
+
+-A neural network is a (crude) mathematical representation of a brain, which consists of smaller components called neurons.
+
+-Each neuron has an input, a processing function, and an output.
+
+-These neurons are stacked together to form a network, which can be used to approximate any function.
+
+-To get the best possible neural network, we can use techniques like gradient descent to update our neural network model.
+
+Given above is a description of a neural network. When does a neural network model become a deep learning model?
+
+
+A. When you add more hidden layers and increase depth of neural network
+
+B. When there is higher dimensionality of data
+
+C. When the problem is an image recognition problem
+
+D. When the number of predictors is greater than the number of outputs
+
+
+
+
+
+ANSWER:   A. When you add more hidden layers and increase depth of neural network
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.13 (1 pt)**
+
+How the non-linearity of a neural network can be achieved?
+
+ 
+
+A. By implementing Stochastic Gradient Descent
+
+B. By applying a tangent function
+
+C. By using backpropagation
+
+D. None of the answers
+
+ 
+ANSWER:  B. By applying a tangent function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.14 (1pt)**
+
+Order the following according to the sequence of steps in gradient descent.
+
+ 
+
+1.Calculate error between the actual value and the predicted value
+
+2.Reiterate until you find the best weights of network
+
+3.Pass an input through the network and get values from output layer
+
+4.Initialize random weight and bias
+
+5.Go to each neurons which contributes to the error and change its respective values to reduce the error
+
+ 
+ 
+ANSWER:   4 , 3 , 1 , 5 , 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Q.15 (1 pt)**
+
+For a simple binary input variables X1 and X2, what would be choice of weights and biases in order to learn the AND function (see lecture for the description)?
+
+ 
+
+A. Bias = -1.5, w1 = 1, w2 = 1
+
+B. Bias = 1.5, w1 = 2, w2 = 2
+
+C. Bias = 1, w1 = 1.5, w2 = 1.5
+
+D. None of the answers
+
+```{r}
+bias <- -1.5
+w1 <- 1
+w2 <- 1
+x1 <- c(0,0,1,1)
+x2 <- c(0,1,0,1)
+
+bias + (w1 * x1) + (w2 * x2)
+
+
+```
+
+
+ANSWER: A. Bias = -1.5, w1 = 1, w2 = 1   (assuming the cutoff is greater or less than 0)

@@ -1,4 +1,0 @@
-﻿  FloatAverageIsEmptyRepurposed.cpp
-c:\users\dkwliu\desktop\dstuf\cis 27\spring 2018\assignment 8\floataverageisemptyrepurposed\floataverageisemptyrepurposed\floataverageisemptyrepurposed.cpp(101): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\dkwliu\desktop\dstuf\cis 27\spring 2018\assignment 8\floataverageisemptyrepurposed\floataverageisemptyrepurposed\floataverageisemptyrepurposed.cpp(136): warning C4101: 'numTemp': unreferenced local variable
-  FloatAverageIsEmptyRepurposed.vcxproj -> C:\Users\dkwliu\Desktop\DStuf\CIS 27\Spring 2018\Assignment 8\FloatAverageIsEmptyRepurposed\Debug\FloatAverageIsEmptyRepurposed.exe

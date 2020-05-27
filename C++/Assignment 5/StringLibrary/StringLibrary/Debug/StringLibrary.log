@@ -1,2 +1,0 @@
-﻿  StringLibrary.cpp
-c:\users\dkwliu\desktop\dstuf\cis 27\spring 2018\assignment 5\stringlibrary\stringlibrary\stringlibrary.cpp(214): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
