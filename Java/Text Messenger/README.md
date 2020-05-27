@@ -2,7 +2,7 @@ Text messenger project which allows user to user messaging via tcp connection.
 
 Instructions for use:
 
-- Execute the server.
+- Run the server.
 
 - In the TextMessenger project, in the TextMessenger class, change the ip to where to the server is located.
 
