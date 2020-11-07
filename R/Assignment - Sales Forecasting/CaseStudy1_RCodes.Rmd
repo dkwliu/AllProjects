@@ -1,0 +1,26 @@
+---
+title: "Case Study 1"
+author: "David Liu"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup}
+install.packages("forecast",repos = "http://cran.us.r-project.org")
+library(forecast)
+```
+
+## QUESTION 1: Identify time series components and plot the data.
+### a. Create time series data set in R using the ts() function.
+```{r}
+sales.data <- read.csv("673_case1.csv")
+sales.ts <- ts(sales.data$Sales, start=c(2015,1), end=c(2019,12), freq=12)
+sales.ts
+```
+
+### b. Employ the plot() function to create a data plot with the historical data, provide it in your report, and explain what data patterns can be visualized in this plot. 
+```{r}
+plot(sales.ts, xlab="Year", ylab="Sales (millions $)", ylim=c(0,500), 
+     main="World Wide Monthly Sales")
+```
