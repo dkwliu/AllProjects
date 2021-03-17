@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+	<head>
+		<title>Dice Roller</title>
+		
+		<script type="text/javascript">
+			var Die = function(sides) {			
+				this.die = sides;						
+			}
+		
+			Die.prototype.roll = function() {
+				return Math.floor(Math.random() * (this.die) + 1);
+			};
+							
+			Die.prototype.getValue = function() {
+				var value1 = document.getElementById("firstdie").value;
+				var value2 = document.getElementById("seconddie").value;
+				return value1;
+			};
+			
+			
+			var PairOfDice = function(sides) {   // default to a six-sided die
+				this.die = sides;
+			}
+				
+			PairOfDice.prototype.roll = function() {
+				return value = Math.floor(Math.random() * (this.die) + 1);	
+			};
+				
+			PairOfDice.prototype.getValue1 = function() {    // get value of die1
+				var value1 = document.getElementById("firstdie").value;
+				return value1;
+			};
+				
+			PairOfDice.prototype.getValue2 = function() {    // get value of die2
+				var value2 = document.getElementById("seconddie").value;
+				return value2;
+			};
+				
+			PairOfDice.prototype.getSum = function() {
+				var sum = parseInt(this.getValue1()) + parseInt(this.getValue2());
+				return sum;
+			};//get the sum of both dice
+			
+			function rolldice() {
+				var dice = new PairOfDice(6);
+				
+				document.getElementById("firstdie").value = dice.roll();
+				document.getElementById("seconddie").value = dice.roll();
+				
+				
+				if (dice.getSum() == 7) {
+					document.getElementById("message").value = "Crap!";
+				} else if (dice.getValue1() == dice.getValue2() && dice.getValue1() == 1) {
+					document.getElementById("message").value = "Snake eyes!";
+				} else if (dice.getValue1() == dice.getValue2() && dice.getValue1() == 6) {
+					document.getElementById("message").value = "Box cars!";
+				} else {
+					document.getElementById("message").value = "";				
+				}			
+			}
+		</script>
+	</head>
+	
+	<body>
+		<h1>Dice Roller</h1>
+		
+		<table>
+			<tr>
+				<td><label>Die 1:</label></td>
+				<td><input type="number" id="firstdie" disabled="disabled" /></td>
+			</tr>			
+			<tr>
+				<td><label>Die 2:</label></td>
+				<td><input type="number" id="seconddie" disabled="disabled" /></td>			
+			</tr>				
+			<tr>
+				<td><label>Message:</label></td>
+				<td><input type="text" id="message" disabled="disabled" /></td>			
+			</tr>
+			<tr>
+				<td><input type="button" onclick="rolldice()" value="Roll the Dice" /></td>
+			</tr>	
+		</table>
+	</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+	<head>
+		<title>Area and Perimeter Calculator</title>
+		
+		<script type="text/javascript">
+			function calc() {
+			
+				var length = document.getElementById("Length").value;
+				var width = document.getElementById("Width").value;
+				
+				if (length <= 0) {
+					alert("Length must be a positive number!");
+				} else if (width <= 0) {
+					alert("Width must be a positive number!");				
+				} else {
+					var area = (length * width).toFixed(2);
+					var perimeter = (2 * width + 2 * length).toFixed(2);
+			
+					document.getElementById("Area").value = area;
+					document.getElementById("Perimeter").value = perimeter;				
+				}
+			}
+		</script>			
+		
+	</head>
+	
+	<body>
+		<div align="center">
+			<h1> Area and Perimeter Calculator </h1>
+			<p> 
+				Enter the values below and click "Calculate." 
+			</p>
+		
+			<table align="center">
+				<tr>
+					<th align="right"><label for="Length"> Length: </label></th> 
+					<td align="left"><input id="Length" type="number" min="0" required="required"/></td>
+				</tr>
+				<tr>
+					<th align="right"><label for="Width" > Width: </label></th> 			
+					<td align="left"><input id="Width" type="number" min="0" required="required"/></td>
+				</tr>
+				<tr>
+					<th align="right"><label for="Area"> Area: </label></th> 			
+					<td align="left"><input id="Area" type="text" disabled="disabled"></td>
+				</tr>
+				<tr>
+					<th align="right"><label for="Perimeter"> Perimeter: </label></th> 			
+					<td align="left"><input id="Perimeter" type="text" disabled="disabled"/></td>
+				</tr>	
+				<tr>
+					<td></td>
+					<td><input type="button" id="Calculate" onclick="calc()" value="Calculate" /></td>
+				</tr>	
+			</table>
+		</div>
+	</body>
+</html>

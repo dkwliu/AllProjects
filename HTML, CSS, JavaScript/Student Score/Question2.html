@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+	<head>
+		<title>Student Scores</title>
+		
+		<script type="text/javascript">
+			var array = [];
+			var grades = 0;
+			
+			function addstudent() {
+				var last = document.getElementById("lastname").value;
+				var first = document.getElementById("firstname").value;
+				var score = document.getElementById("score").value;				
+
+				grades = parseFloat(grades) + parseFloat(score);
+				
+				var item = last + ", " + first + ": " + score;
+				
+				array.push(item);
+				
+				var count = array.length;				
+				
+				var average = grades/count;
+				
+				document.getElementById("box").value = array.join("\n");
+				document.getElementById("averagescore").value = average;
+				
+				
+				var item = "<td>" + array + "</td>";
+				document.getElementById("test").innerHTML = item;				
+			}
+			
+			function sort() {
+				array.sort();
+				document.getElementById("box").value = array.join("\n");
+			}
+			
+			function clearscore() {
+				array = [];
+				grades = 0;
+			
+				document.getElementById('box').value = '';
+				document.getElementById('averagescore').value = '';			
+			}
+
+		</script>
+	</head>
+	
+	<body>
+		<div>
+			<h1>Student Scores</h1>
+			
+			<table>
+				<tr>
+					<th align="right"><label>Last Name:</label></th>
+					<td align="left"><input id="lastname" type="text" required="required" /></td>
+				</tr>
+				<tr>
+					<th align="right"><label>First Name:</label></th>
+					<td align="left"><input id="firstname" type="text" required="required" /></td>
+				</tr>
+				<tr>
+					<th align="right"><label>Score:</label></th>
+					<td align="left"><input id="score" type="number" required="required" /></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td align="left"><input id="add" type="button" onclick="addstudent()" value="Add Student Score" /></td>
+				</tr>				
+			</table>
+		</div>
+		
+		<div>
+			<h2>Student Scores</h2>
+			<textarea id="box" rows="10" cols="50" disabled="disabled"></textarea>
+			
+			<table>
+				<tr>
+					<th align="right"><label>Average Score: </label></th>
+					<td align="left"><input id="averagescore" type="number" disabled="disabled" /></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td align="left"><input id="clear" type="button" onclick="clearscore()" value="Clear Student Scores" /></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td align="left"><input id="sort" type="button" onclick="sort()" value="Sort By Last Name" /></td>
+				</tr>
+				<tr id="test">
+				</tr>				
+			</table>
+		</div>
+	</body>
+</html>

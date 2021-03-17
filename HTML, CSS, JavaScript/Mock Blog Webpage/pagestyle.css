@@ -1,0 +1,209 @@
+@charset "UTF-8";
+
+/* style sheet for header */
+
+body {
+   width: 90%;
+   background: url(images/leaf.jpg) top left repeat-y;
+   }
+
+header#imagetitle {
+   height:30em;
+   width: 70%;
+   clear: left;
+   float: left;
+   background-color: rgba(0,255,0,0.5);
+   }   
+   
+article.contact {
+   width: 20%;
+   float: left;
+   background-color: rgba(255,255,255,0.5);
+   height: 25em;
+   padding-top: 5em;
+   padding-left: 2em;
+   }
+   
+h2#contactid  {
+   font-size: 0.9em;
+   }  
+
+
+/* all nav style */
+nav li {
+   list-style-type: none;
+   }
+
+   
+/* navigation bar style */
+   
+nav#siteportal {
+   float: left;
+   width: 70%;
+   margin-bottom: 3em;
+   background-color: rgba(255,255,255,0.5);
+   padding: 2em;
+   color: black;
+   }   
+   
+nav#siteportal li {
+   width: 15%;
+   float: left;
+   text-align: center;
+   font-size: 1.2em;
+   }
+   
+nav#siteportal a {
+   text-decoration: none;   
+   }
+
+   
+/* aside style */
+
+div#sidebar {
+   float: left;
+   background-color: rgba(255,255,255,0.5);
+   height: 15em;
+   padding: 1em;
+   }   
+   
+   
+/* intro article style */
+   
+div#content {
+   float: right;
+   width: 80%;
+   margin-bottom: 7em;
+   font-size: 1.2em;
+   background-color: rgba(0,0,0,0.8);
+   color: white;
+   padding: 1em;
+   }
+   
+/* news and blog portion style */
+   
+div#container2 {
+   margin-left: 7em;
+   margin-bottom: 7em;
+   }
+   
+div#news {
+   float: left;
+   width: 40%;
+   margin-bottom: 7em;
+   background-color: rgba(0,0,0,0.5);
+   height: 15em;
+   color: white;
+   }
+   
+div#blogs {
+   float: left;
+   width: 40%;
+   margin-bottom: 7em;
+   background-color: rgba(0,0,0,0.5);
+   height: 15em;
+   color: white;
+   }
+   
+footer {
+   float: left;
+   text-align: center;
+   margin-left: 15em;
+   color: white;
+   background-color: gray;
+   width: 66%;
+   }
+   
+
+
+/* News page exclusive designs */
+
+section#pageintronews {
+   background-color: rgba(0,0,0,0.8);
+   color: white;
+   padding: 2em;
+   float: left;
+   margin-bottom: 2em;
+   }
+   
+   
+div#newsposts  {
+   background-color: gray;
+   padding: 2em;
+   float: left;
+   margin-bottom: 2em;
+   width: 70%;  
+   }
+
+
+/* Blog page exclusive designs */
+section#pageintro {
+   background-color: rgba(0,0,0,0.8);
+   color: white;
+   float: left;
+   padding: 2em;
+   margin-bottom: 2em;
+   }
+   
+div#postblog {
+   background-color: gray;
+   padding: 2em;
+   float: left;
+   margin-bottom: 2em;
+   width: 70%;
+   }
+
+#postblog textarea {
+   height: 20em;
+   width: 60em;
+   }   
+
+div#postblog input {
+   width: 5em;
+   margin: 1em;
+   }    
+
+div#blogposts {
+   background-color: rgba(255,255,255,0.5);
+   padding: 2em;
+   float: left;
+   margin-bottom: 2em;
+   width: 70%;
+   }   
+   
+
+/* LoginRegister page exclusive design */
+section#register {
+   float: left;
+   background-color: gray;
+   margin-bottom: 7em;
+   }
+
+section#login {
+   float: left;
+   background-color: gray;
+   margin-bottom: 7em;
+   }
+   
+label {
+   clear: left;
+   float: left;
+   display: block;
+   }
+   
+input {
+   float: left;
+   width: 50%;
+   margin: 1em 0em; 
+   }
+   
+textarea {
+   width: 40%;
+   height: 5em;
+   }
+   
+fieldset.options {
+   float: none;
+   }
+
+ 

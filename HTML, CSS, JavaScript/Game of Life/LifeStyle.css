@@ -1,0 +1,14 @@
+#board td {
+	border-style: solid;
+	border-color: gray;
+	border-width: 1px;
+	width: 10px;
+	height: 10px;
+}
+
+#board {
+	width: 1300px;
+	border-style: solid;
+	border-collapse: collapse;
+	border-spacing: 0;	
+}

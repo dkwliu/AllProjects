@@ -1,0 +1,132 @@
+<!Doctype html>
+	<head>
+		<title>Monthly Balance Calculator</title>
+		
+		<script type="text/javascript">
+			var datearray = [];
+			var amountarray = [];
+			var balancearray = [];
+			var overallarray = [datearray, amountarray, balancearray];
+			var balance = 2000.00;
+			var totaldeposit = 0.00;
+			var totalwithdraw = 0.00;
+		
+			function add() {
+				var date = document.getElementById("date").value;
+				var select = document.getElementById("select").value;
+				var amount = document.getElementById("amount").value;
+				var item = "";
+
+				document.getElementById("startingbalance").value = balance;
+				
+				if (date.slice(0,4) < 1000 || date.slice(0,4) > 3000) {
+					alert("Year must be between 1000 and 3000");
+				} else if (amount < 0 || amount > 100000) {
+					alert("Amount must be between $0 and $100,000");
+				} else {
+					if (select == "Deposit") {
+						balance = parseFloat(balance) + parseFloat(amount);
+						totaldeposit = parseFloat(totaldeposit) + parseFloat(amount);
+						amountarray.push(amount);
+					} else {
+						balance = parseFloat(balance) - parseFloat(amount);
+						totalwithdraw = parseFloat(totalwithdraw) - parseFloat(amount);
+						amountarray.push(-amount);
+					}
+				
+					newdate = date.slice(5,7) + "/" + date.slice(8,10) + "/" + date.slice(0,4);
+					datearray.push(newdate);
+				
+					balancearray.push(balance);
+				
+					item = "<tr><td>" + (overallarray[0])[datearray.length - 1] + "</td><td>$</td><td>" + (overallarray[1])[amountarray.length - 1] 
+						+ "</td><td>$</td><td>" + (overallarray[2])[balancearray.length - 1] + "</td></tr>";
+					
+					document.getElementById("place").innerHTML += item;
+				
+					document.getElementById("totaldeposits").value = totaldeposit;
+					document.getElementById("totalwithdrawals").value = totalwithdraw;
+					document.getElementById("endingbalance").value = balance;					
+							
+				}				
+			}
+		</script>
+	</head>
+	
+	<body>
+		<div>
+			<h1> Monthly Balance Calculator </h1>
+			<h1> Add Transaction </h1>
+			<table>
+				<tr>
+					<td><label>Date: </label></td>
+					<td><input id="date" type="date" min="1000-01-01" max="2999-12-31" required="required"/></td>
+				</tr>
+				<tr>
+					<td><label>Type: </label></td>
+					<td><select id="select">
+						<option id="withdrawal" value="Withdrawal">Withdrawal</option>
+						<option id="Deposit" value="Deposit">Deposit</option>					
+					</select></td>				
+				</tr>
+				<tr>
+					<td><label>Amount: </label></td>
+					<td><input id="amount" type="number" min="0" max="100000" required="required"/></td>				
+				</tr>
+				<tr>
+					<td><label></label></td>
+					<td><input id="add" type="button" onclick="add()" value="Add Transaction" /></td>				
+				</tr>			
+			</table>
+		</div>
+	
+		<div>
+			<h1>Transactions</h1>
+			
+			<table>
+				<col width="150">
+				<col width="75">
+				<col width="75">
+				<tr>
+					<td>Date</td>
+					<td colspan="2">Amount</td>
+					<td colspan="2">Running Balance</td>					
+				</tr>
+				<tr>
+					<td>-----------------------</td>
+					<td colspan="2">-----------------------</td>
+					<td colspan="2">-----------------------</td>					
+				</tr>
+			</table>
+			<table id="place">
+				<col width="150">
+				<col width="75">
+				<col width="75">	
+				<col width="75">
+				<col width="75">				
+			</table>			
+		</div>
+		
+		<div>
+			<h1>Summary</h1>
+			<table>
+				<tr>
+					<td align="right"><label>Starting Balance</label></td>
+					<td><input type="number" id="startingbalance" disabled="disabled"/></td>
+				</tr>
+				<tr>
+					<td align="right"><label>Total Deposits</label></td>
+					<td><input type="number" id="totaldeposits" disabled="disabled"/></td>					
+				</tr>
+				<tr>
+					<td align="right"><label>Total Withdrawals</label></td>
+					<td><input type="number" id="totalwithdrawals" disabled="disabled"/></td>					
+				</tr>
+				<tr>
+					<td align="right"><label>Ending Balance</label></td>
+					<td><input type="number" id="endingbalance" disabled="disabled"/></td>					
+				</tr>				
+			</table>
+		</div>
+	</body>
+</html>

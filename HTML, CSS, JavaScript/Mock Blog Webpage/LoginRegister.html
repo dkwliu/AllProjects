@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8" />
+
+   <!--
+      author: David Liu
+      date: 4/25/2015
+   -->
+
+   <title>
+      EnviroBloggers - Login/Register
+   </title>
+
+   <link href="pagestyle.css" rel="stylesheet" />   
+   
+</head>
+
+<body style="background-color:lightgreen">
+	
+   <header role="banner" style="background-color:green" id="imagetitle">
+      <hgroup>
+	     <img src="images/forest.jpg" alt="rainforest" width="800" height="300"/>
+         <h1 style="color:white"> EnviroBloggers </h1>
+         <h2 style="color:white"> The Place for Your Environmental News </h2>
+      </hgroup>
+   </header>
+   
+   <nav id="siteportal">
+	  <ul style="background-color:lightgreen">
+         <li><a href="Home.html">Home</a></li>
+         <li><a href="News.html">News</a></li>
+		 <li><a href="Blogs.html">Blogs</a></li>
+		 <li><a href="LoginRegister.html">Login/Register</a></li>
+      </ul>		 
+   </nav>
+   
+   
+   <!-- this portion introduces the login/register section of the site -->
+   <section id="register">
+         <h2>Register</h2>
+         <form id="register" name="infopage" action="noaction" method="post">
+            <fieldset id="memberinfo">
+            
+               <label for="blogname">Name *</label>
+               <input name="blogname" id="blogname" placeholder="first and last name" required="required" />
+			   
+               <label for="password">Password *</label>
+               <input name="password" id="password" type="password" required="required" title="You must provide your password" />			   
+
+               <label for="phone">Phone number</label>
+               <input name="phone" id="phone" placeholder="(nnn) nnn-nnnn" type="text" pattern="^\d{10}$|^(\(\d{3}\)\s*)?\d{3}[\s-]?\d{4}$" />
+
+               <label for="email">E-mail *</label>
+               <input name="email" id="email" type="email" required="required" />
+
+               <label>Where did you hear about us?</label>
+			   <textarea name="comments" id="comments"></textarea>
+			   
+			   <label>Would you like to receive news updates?</label>
+			   <fieldset class="options">
+                  <label for="sYes">Yes</label>
+                  <input type="radio" name="newsupdate" id="sYes" value="yes" />
+                  <label for="sNo">No</label>
+                  <input type="radio" name="newsupdate" id="sNo" value="no" />
+               </fieldset>
+	   
+            </fieldset>
+			
+	        <p>
+               <input type="submit" value="Register" />
+               <input type="reset" value="Cancel" />
+            </p>
+		 </form>	
+   </section>			
+			
+   <section id="login">
+      <h2>Login</h2>
+      <form id="login" name="infopage2" action="noaction" method="post">
+         <fieldset id="memberinfo2">
+            <label for="blogname">Name *</label>
+            <input name="blogname" id="blogname" placeholder="first and last name" required="required" />
+			   
+            <label for="password">Password *</label>
+            <input name="password" id="password" type="password" required="required" title="You must provide your password" />               
+         </fieldset>
+
+	     <p>
+            <input type="submit" value="Login" />
+            <input type="reset" value="Cancel" />
+         </p>
+      </form>		 
+   </section>
+
+   <footer role="contentinfo">
+      <address> contact: <a href="mailto:david92liu@gmail.com">david92liu@gmail.com</a> phone: (510) 219 - 5580</address>
+   </footer>
+   
+</body>
+
+</html>

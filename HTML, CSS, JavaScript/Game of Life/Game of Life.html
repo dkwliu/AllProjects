@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+	<head>
+		<link href="Lifestyle.css" rel="stylesheet" />
+		
+		<script type="text/javascript">
+			var addcells = [];
+			var killcells = [];
+			var startgame;
+			
+			// creates grid on startup
+			function startpage() {
+				for (i = 1; i <= 50; i++) {
+					document.getElementById("board").innerHTML += "<tr id='row" + i + "'></tr>";
+					for (j = 1; j <= 100; j++) {
+						var cellid = (100 * (i - 1) + j);
+						document.getElementById("row" + i + "").innerHTML += "<td id='" + cellid + "' onclick='clicked(" + cellid + ")'></td>";
+					}					
+				}
+			}
+			
+			// clicked cells will change color and be recognized as clicked
+			function clicked(cellid) {
+				if (document.getElementById(cellid).style.backgroundColor != "black") {
+					document.getElementById(cellid).style.backgroundColor = "black";
+				} else {
+					document.getElementById(cellid).style.backgroundColor = "white";
+				}
+			}
+			
+			function startprogram() {
+				startgame = setInterval(stepprogram, 400);
+			}
+			
+			function stopprogram() {
+				clearInterval(startgame);
+			}
+			
+			function stepprogram() {				
+				for (i = 1; i <= 5000; i++) {
+					var neighbors = 0;
+				
+
+					if (i - 1 > 0 && document.getElementById(i - 1).style.backgroundColor == "black" 
+							&& (i - 1) % 100 != 0) {
+							neighbors += 1;
+						}
+						
+					if (i + 1 <= 5000 && document.getElementById(i + 1).style.backgroundColor == "black" 
+						&& (i + 1) % 100 != 1) {
+						neighbors += 1;
+					}
+
+					if (i + 100 <= 5000 && document.getElementById(i + 100).style.backgroundColor == "black" ) {
+						neighbors += 1;
+					}
+
+					if (i - 100 > 0 && document.getElementById(i - 100).style.backgroundColor == "black") {
+						neighbors += 1;
+					}
+					
+					if (i + 101 <= 5000 && document.getElementById(i + 101).style.backgroundColor == "black" 
+						&& (i + 101) % 100 != 1) {
+						neighbors += 1;
+					}
+
+					if (i + 99 <= 5000 && document.getElementById(i + 99).style.backgroundColor == "black" 
+						&& (i + 99) % 100 != 0) {
+						neighbors += 1;
+					}
+
+					if (i - 101 > 0 && document.getElementById(i - 101).style.backgroundColor == "black" 
+						&& (i - 101) % 100 != 0) {
+						neighbors += 1;
+					}
+
+					if (i - 99 > 0 && document.getElementById(i - 99).style.backgroundColor == "black" 
+						&& (i - 99) % 100 != 1) {
+						neighbors += 1;
+					}
+					
+					if (neighbors < 2 || neighbors > 3) {
+						killcells.push(i);
+					}
+					
+					if (neighbors == 3) {
+						addcells.push(i);
+					}
+				}
+				
+				for (i = 0; i < killcells.length; i++) {
+					document.getElementById(killcells[i]).style.backgroundColor = "white";
+				}
+				
+				for (i = 0; i < addcells.length; i++) {
+					document.getElementById(addcells[i]).style.backgroundColor = "black";
+				}
+				
+				killcells = [];
+				addcells = [];
+			}
+			
+			function clearprogram() {
+				while (document.getElementById("board").hasChildNodes()) {
+					document.getElementById("board").removeChild(document.getElementById("board").firstChild);
+				}
+				startpage();
+				clearInterval(startgame);
+				killcells = [];
+				addcells = [];					
+			}
+		</script>
+		
+		<title>Game of Life</title>
+	</head>
+	
+	<body onload="startpage()" >
+		<h1>Game of Life</h1>
+				
+		<table id="board">
+			
+		</table>
+		
+		<table id="buttons">
+			<tr>
+				<td><input type="button" value="Start" onclick="startprogram()" /></td>
+				<td><input type="button" value="Stop" onclick="stopprogram()" /></td>
+				<td><input type="button" value="Step" onclick="stepprogram()" /></td>
+				<td><input type="button" value="Clear" onclick="clearprogram()" /></td>				
+			</tr>
+			<tr id="test"></tr>
+		</table>
+	</body>
+</html>
